@@ -12,3 +12,10 @@ This project just started and isn not compleet yet.
 5) Possible Satellite Telemetry decoding.
 6) Possible hosting of telemetry data
 
+# Prerequisite
+1) Linux UBUNTU 16.04 +
+2) predict
+3) Apache
+4) php
+5) google map key
+6) git
