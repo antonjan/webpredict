@@ -19,3 +19,6 @@ This project just started and is not complete yet.
 4) php
 5) google map key
 6) git
+
+Run predict in server mode udp port 1210
+sudo predict -S
