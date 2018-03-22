@@ -19,6 +19,8 @@ This project just started and is not complete yet.
 4) php
 5) google map key
 6) git
-
-Run predict in server mode udp port 1210
-sudo predict -S
+# Usage
+Run predict in server mode on udp port 1210 ( u mite have to setup your ground station details the first time)
+sudo predict -s
+Then clone this repository in your apache web directory  /var/www/html/
+Then take your browser to http://localhost/webpredict
