@@ -12,7 +12,7 @@
 <p id="demo3"></p>
 <p id="demo4"></p>
 <script>
-var myVar = setInterval(myTimer, 2500);
+var myVar = setInterval(myTimer, 2000);
 
 function myTimer() {
     var d = new Date();
@@ -28,16 +28,11 @@ xmlhttp.onreadystatechange = function() {
 	document.getElementById("demo3").innerHTML = "lat: " + myObj.lat;
 	//onload = "loadMap()"
 	const mapOptions = {
-	   //center:new google.maps.LatLng(-26.2048, 28.2708), zoom: 11
-	     center:new google.maps.LatLng(myObj.lat,myObj.long ), zoom: 6
+	   center:new google.maps.LatLng(-26.2048, 28.2708), zoom: 11
 		          }
          const map = new google.maps.Map(document.getElementById("map"), mapOptions);
-	 let marker = new google.maps.Marker({
-		               map: map,
-	 position: new google.maps.LatLng(myObj.lat, myObj.long),
-	 //  position: new google.maps.LatLng(myObj.long,myObj.lat),title: myObj.name
-	 title: hotel.name
-	   })
+
+
     }
 }
 xmlhttp.open("GET", "jason.php", true);

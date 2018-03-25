@@ -12,7 +12,7 @@
 <p id="demo3"></p>
 <p id="demo4"></p>
 <script>
-var myVar = setInterval(myTimer, 2500);
+var myVar = setInterval(myTimer, 1000);
 
 function myTimer() {
     var d = new Date();
@@ -27,17 +27,6 @@ xmlhttp.onreadystatechange = function() {
         document.getElementById("demo2").innerHTML = "Long: " + myObj.long ;
 	document.getElementById("demo3").innerHTML = "lat: " + myObj.lat;
 	//onload = "loadMap()"
-	const mapOptions = {
-	   //center:new google.maps.LatLng(-26.2048, 28.2708), zoom: 11
-	     center:new google.maps.LatLng(myObj.lat,myObj.long ), zoom: 6
-		          }
-         const map = new google.maps.Map(document.getElementById("map"), mapOptions);
-	 let marker = new google.maps.Marker({
-		               map: map,
-	 position: new google.maps.LatLng(myObj.lat, myObj.long),
-	 //  position: new google.maps.LatLng(myObj.long,myObj.lat),title: myObj.name
-	 title: hotel.name
-	   })
     }
 }
 xmlhttp.open("GET", "jason.php", true);
@@ -49,34 +38,22 @@ function getSatJasonMarkers(){
 var xmlhttp = new XMLHttpRequest();
 xmlhttp.onreadystatechange = function() {
 	    if (this.readyState == 4 && this.status == 200) {
-	    //var myObj = JSON.parse(this.responseText);
-            //      var str = "long" +  myObj.long;
-	    //      var str2 = myObj.name;
-	    //      var res = str1.concat(str,str2);
-	    //      document.getElementById("demo2").innerHTML = "Long: " + myObj.long ;
-	    const markers = this.responseText;
-            // Load JSON Data
-	    const hotelMarkers = getJSONMarkers();
-	    //  const satelliteMarkers = getSatJasonMarkers(); 
-            //  var myObj = JSON.parse(satelliteMarkers);
-            // Initialize Google Markers
-            for(hotel of hotelMarkers) {
-	    //for(satellite of satelliteMarkers){   
-	    // document.getElementById("demo4").innerHTML = "Long: " + myObj.long ;    
-	    //document.getElementById("demo4").innerHTML = "Long---: " + satellite.long; 
-	    let marker = new google.maps.Marker({
-	    map: map,
-	    position: new google.maps.LatLng(hotel.location[0], hotel.location[1]),
-	    //position: new google.maps.LatLng(myObj.long,myObj.lat),title: myObj.name
-            title: hotel.name
-	     })
-            }
+		            //var myObj = JSON.parse(this.responseText);
+			    //      var str = "long" +  myObj.long;
+			    //      var str2 = myObj.name;
+			    //      var res = str1.concat(str,str2);
+			    //        document.getElementById("demo2").innerHTML = "Long: " + myObj.long ;
+			    const markers = this.responseText;
 	    }
+
 }
 xmlhttp.open("GET", "jason.php", true);
 xmlhttp.send();
+
 return markers;
 }
+
+
 </script>
     <h2>Satellites</h2>
     <div id = "map" style = "width:640px; height:480px;"></div>
