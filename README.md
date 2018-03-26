@@ -14,11 +14,12 @@ This project just started and is not complete yet.
 
 # Prerequisite.
 1) Linux UBUNTU 16.04 +
-2) predict
-3) Apache
-4) php
-5) google map key
-6) git
+2) predict from http://www.qsl.net/kd2bd/predict.html
+3) Apache apt-get install apacahe2
+4) php sudo apt-get install php
+5) google map key (get it from googgle)
+6) git sudo apt-get install git
+7) Mysql  sudo apt-get mysql.
 # Usage
 Run predict in server mode on udp port 1210 ( u mite have to setup your ground station details the first time)
 sudo predict -s
