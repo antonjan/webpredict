@@ -7,7 +7,6 @@
 
   <body onload = "loadMap()">
 <p id="demo"></p>
-<p id="demo0"></p>
 <p id="demo2"></p>
 <p id="demo3"></p>
 <script>
@@ -23,8 +22,7 @@ xmlhttp.onreadystatechange = function() {
 //	var str = "long" +  myObj.long;
 //	var str2 = myObj.name;
 //	var res = str1.concat(str,str2);
-	document.getElementById("demo0").innerHTML = "name: " + myObj.name;
-        document.getElementById("demo2").innerHTML = "Long: " + myObj.long;
+        document.getElementById("demo2").innerHTML = "Long: " + myObj.long ;
 	document.getElementById("demo3").innerHTML = "lat: " + myObj.lat;
 	onload = "loadMap()"
     }
