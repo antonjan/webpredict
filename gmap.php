@@ -19,6 +19,21 @@
 <meta charset="utf-8"/>
    <title>Satellites</title>
   </head>
+<?php
+
+mysql_connect('localhost', 'satellite', 'satellite123');
+meysql_select_db('satellite_Predict');
+
+$sql = "SELECT satelite_name FROM Satellites";
+$result = mysql_query($sql);
+
+echo "<select name='Satelliet'>";
+while ($row = mysql_fetch_array($result)) {
+    echo "<option value='" . $row['Satellite_Name'] . "'>" . $row['Satellite_Name'] . "</option>";
+}
+echo "</select>";
+
+?>
 
 </form>
 <p id="demo"></p>
