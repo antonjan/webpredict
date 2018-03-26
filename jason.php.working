@@ -17,7 +17,7 @@ if(!($sock = socket_create(AF_INET, SOCK_DGRAM, 0)))
      
     die("Couldn't create socket: [$errorcode] $errormsg \n");
 }
-//echo 'Satellite ' . htmlspecialchars($_GET["satellite"]) . '!';
+ 
 //echo "Socket created \n";
 //Communication loop
 //while(1)
@@ -25,13 +25,7 @@ if(!($sock = socket_create(AF_INET, SOCK_DGRAM, 0)))
     //Take some input to send
 //    echo 'Enter a message to send : ';
 //    $input = fgets(STDIN);
-       // $input = "GET_SAT PCSAT\n";
-	$satellite = htmlspecialchars($_GET["satellite"]);
-	if($satellite == NULL) {
- //     echo 'is null';
-	$satellite ="PCSAT";
-  }
-	$input = "GET_SAT ". $satellite ."\n";
+        $input = "GET_SAT PCSAT\n";
     //Send the message to the server
     if( ! socket_sendto($sock, $input , strlen($input) , 0 , $server , $port))
     {
