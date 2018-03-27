@@ -59,7 +59,7 @@ function myTimer() {
 //var as = document.form1.satellite.value;
 var select = document.getElementById("satellite");
 var satellite  = select.options[select.selectedIndex].text;
- document.getElementById("demo1").innerHTML = " bb" + satellite;
+// document.getElementById("demo1").innerHTML = " bb" + satellite;
 //xmlhttp.open("GET", "jason.php?="+ satellite, true);
 xmlhttp.open("GET", "jason.php?satellite="+ satellite, true);
 xmlhttp.send();
