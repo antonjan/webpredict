@@ -24,8 +24,11 @@ This project just started and is not complete yet.
 Run predict in server mode on udp port 1210 ( u mite have to setup your ground station details the first time)
 
 
-Run the following command to start predict server<br>
-sudo predict -s
+Run the following command <br>nd start the predict server<br>
+run the following commands in the sh directory to update the TLE data and load in satelite db of predict <br>
+import_satellites_into_db.sh  predict_tle_update.sh<br>
+sudo predict -s<br>
+We can now test to see if the jason php scripts can see the predict server<br>
 Testing jason satelite details<br>
 http://localhost/webpredict/jason.php?satellite=OSCAR-7<br>
 {"name":"OSCAR-7","long":"87.03 ","lat":"-22.87","az":"237.81 ","el":"-45.44","aollos":"1532901346","footprint":"7907.73","range":"10983.28","altitude":"1458.06","velocity":"7.13 ","orbitnr":"100006","visibility":"D","orbitalphase":"92.20 ","eclipsephase":"-67.15 ","squint":"360.00 "} <br>
