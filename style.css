@@ -1,0 +1,30 @@
+/* style.css */
+
+.main-content-box {
+    width: 100%;
+}
+
+.map-box {
+    width: 55%;
+    display: inline-block;
+    float: left;
+    height: 100%;
+}
+
+.sat-detail-box {
+    width: 45%;
+    display: inline-block;
+    float: right;
+    background-color: #ccc;
+    height: 100%;
+}
+
+.bottom-detail {
+    padding: 20px;
+}
+input[type=text] {
+    width: 70;
+    padding: 1px 1px;
+    margin: 1px 0;
+    box-sizing: border-box;
+}
