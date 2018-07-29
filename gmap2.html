@@ -1,46 +1,166 @@
-<!DOCTYPE html>
+<!DOCTYPE hstml>
 <html>
-  <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <style type="text/css">
-      html { height: 100% }
-      body { height: 100%; margin: 0; padding: 0 }
-      #map_canvas { height: 100% }
-    </style>
-    <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZaf2m_PtVBRoD1hYP510tyYZorJ7z9XE&callback=initMap">
-    </script>
-    <script type="text/javascript">
-      var map;
-      function initialize() {
-        var mapOptions = {
-          center: new google.maps.LatLng(58, 16),
-          zoom: 7,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        map = new google.maps.Map(document.getElementById("map_canvas"),
-            mapOptions);
-      }
-    </script>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>    
-  </head>
-  <body onload="initialize()">
-    <div id="map_canvas" style="width:100%; height:100%"></div>
-    <script type="text/javascript">
-      $(document).ready(function() {
-        $.getJSON("foo.txt", function(json1) {
-          $.each(json1, function(key, data) {
-            var latLng = new google.maps.LatLng(data.lat, data.lng); 
-            // Creating a marker and putting it on the map
-            var marker = new google.maps.Marker({
-                position: latLng,
-                title: data.title
-            });
-            marker.setMap(map);
-          });
-        });
-      });
-    </script>
-  </body>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Satellites</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body onload="loadMap()">
+
+    <!-- <div class="header-box">
+        <h1>Satellite Position Tracking</h1>
+    </div> -->
+
+    <div class="main-content-box">
+
+        <div class="map-box">
+
+            <!-- Map -->
+            <div id="map" style="width:100%; height:100%;"></div>
+
+        </div>
+
+        <div class="sat-detail-box">
+
+            <div class="top-detail">
+Select Satelite below<br>
+
+<br>
+                <select id="satellite">
+                    <option>Choose an option</option>
+                    <option value="ZACUBE">ZACUBE</option>
+                    <option value="ISS">ISS</option>
+                    <option value="NOAA-16">NOAA-16</option>
+                    <option value="NOAA-15">NOAA-15</option>
+                    <option value="NOAA-18">NOAA-18</option>
+                    <option value="OSCAR-7">OSCAR-7</option>
+                    <option value="PACSAT">PACSAT</option>
+                    <option value="OSCAR-51">OSCAR-51</option>
+                </select>
+            </div>
+
+            <div class="bottom-detail">
+
+                <h3>Satellite Details</h3>
+
+                <p>Current Time: <span id="demo"></span></p>
+
+                <ul>
+                    <li>Name: <span id="sat-name"></span></li>
+                    <li>Latitiude: <span id="sat-lat"></span></li>
+                    <li>Longitiude: <span id="sat-long"></span></li>
+                    <li>Azimov: <span id="sat-az"></span></li>
+                    <li>Elivation: <span id="sat-el"></span></li>
+		    <li>Doppler offset 100Mhz: <span id="sat-dop"></span></li>
+			
+                </ul>
+
+                <!-- <p>Satellite name: <span id="demo1"></span></p> -->
+
+                <iframe src="http://zr6aic.giga.co.za:8902/m.html" style="border:0px #ffffff none;" name="myiFrame" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="600px" width="540px" allowfullscreen></iframe>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
 </html>
 
+
+<script>
+    var map;
+    var myVar = setInterval(myTimer, 2500);
+    var mapOptions;
+    var myObj;
+    var newlatlng;
+    var marker;
+    var image = 'images/Satellite_Icon.png';
+
+    function loadMap() {
+        // Initialize Google Maps
+        mapOptions = {
+            center: new google.maps.LatLng(-26.2048, 28.2708),
+            zoom: 4
+        }
+
+        map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+        marker = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(-26.2048, 28.2708),
+            icon: image,
+            title: 'Satellite'
+        });
+
+        myTimer();
+    }
+
+    function myTimer() {
+
+        //get and dsiplay date
+        var d = new Date();
+        document.getElementById("demo").innerHTML = d.toLocaleTimeString();
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                myObj = JSON.parse(this.responseText);
+
+                //print values at top
+                document.getElementById("sat-name").innerHTML = myObj.name;
+                document.getElementById("sat-lat").innerHTML = myObj.lat;
+                document.getElementById("sat-long").innerHTML = myObj.long;
+                document.getElementById("sat-az").innerHTML = myObj.az;
+                document.getElementById("sat-el").innerHTML = myObj.el;
+
+
+
+
+
+                mapOptions = {
+                    center: new google.maps.LatLng(Number(myObj.lat), Number(myObj.long)),
+                    zoom: 3
+                }
+
+                //replace latlng and pan map
+                newlatlng = new google.maps.LatLng((myObj.lat), Number(myObj.long));
+                map.panTo(newlatlng);
+
+                marker.setPosition(newlatlng);
+            }
+        }
+
+        var select = document.getElementById("satellite");
+        var satellite = select.options[select.selectedIndex].text;
+
+        xmlhttp.open("GET", "jason.php?satellite=" + satellite, true);
+        xmlhttp.send();
+    }
+
+    function getSatJasonMarkers() {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var myObj = JSON.parse(this.responseText);
+                const markers = this.responseText;
+                // Load JSON Data
+                //	    const hotelMarkers = getJSONMarkers();
+            }
+        }
+        var select = document.getElementById("satellite");
+        var satellite = select.options[select.selectedIndex].text;
+        document.getElementById("demo1").innerHTML = " bb" + satellite;
+
+        xmlhttp.open("GET", "jason.php?satellite=" + satellite, true);
+
+        //	xmlhttp.open("GET", "jason.php", true);
+        xmlhttp.send();
+    }
+</script>
+
+<!-- Google Map Key -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDZaf2m_PtVBRoD1hYP510tyYZorJ7z9XE">
+</script>
