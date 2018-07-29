@@ -26,12 +26,12 @@ if(!($sock = socket_create(AF_INET, SOCK_DGRAM, 0)))
 //    echo 'Enter a message to send : ';
 //    $input = fgets(STDIN);
        // $input = "GET_SAT PCSAT\n";
-	$satellite = htmlspecialchars($_GET["satellite"]);
-	if($satellite == NULL) {
+	$satname = htmlspecialchars($_GET["satellite"]);
+	if($satname == NULL) {
  //     echo 'is null';
-	$satellite ="PCSAT";
+	$satname ="PCSAT";
   }
-	$input = "GET_DOPPLER ". $satellite ."\n";
+	$input = "GET_DOPPLER ". $satname ."\n";
     //Send the message to the server
     if( ! socket_sendto($sock, $input , strlen($input) , 0 , $server , $port))
     {
@@ -51,8 +51,8 @@ if(!($sock = socket_create(AF_INET, SOCK_DGRAM, 0)))
         $satellite = explode("\n", $reply);
         //print_r (explode(" ",$reply));
         //echo $return_str. "<br>";
-        $myObj->name = $satellite[0];
-        $myObj->doppler = $satellite[1];
+        $myObj->name = $satname;
+        $myObj->doppler = $satellite[0];
         $myJSON = json_encode($myObj);
         echo $myJSON;
         //echo "Name " . $satellite[0]."<br>"; // Name 
