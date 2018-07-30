@@ -27,9 +27,8 @@
             <div class="top-detail">
 Select Satelite below<br>
 
-<br>
                 <select id="satellite">
-                    <option>Choose an option</option>
+                    <option>Choose Satellite to Track</option>
                     <option value="ZACUBE">ZACUBE</option>
                     <option value="ISS">ISS</option>
                     <option value="NOAA-16">NOAA-16</option>
@@ -45,17 +44,17 @@ Select Satelite below<br>
 
                 <h3>Satellite Details</h3>
 
-                <p>Current Time: <span id="demo"></span></p>
-
+                Current Time: <span id="demo"></span><br>
                 <ul>
                     <li>Name: <span id="sat-name"></span></li>
                     <li>Latitiude: <span id="sat-lat"></span></li>
                     <li>Longitiude: <span id="sat-long"></span></li>
                     <li>Azimov: <span id="sat-az"></span></li>
                     <li>Elivation: <span id="sat-el"></span></li>
-		    <li>Doppler offset 100Mhz: <span id="sat-dop"></span></li>
-			
+		    <li>Footprint: <span id="sat-foot"></span></li>	
+	    <li><form> Center Frequency <input type="text" name="Cen_freq" value="145.800"> Doppler offset 100Mhz: <span id="sat-dop"></span></form></li>
                 </ul>
+
 
                 <!-- <p>Satellite name: <span id="demo1"></span></p> -->
 
@@ -78,7 +77,7 @@ Select Satelite below<br>
     var newlatlng;
     var marker;
     var image = 'images/Satellite_Icon.png';
-
+    var circle;
     function loadMap() {
         // Initialize Google Maps
         mapOptions = {
@@ -94,6 +93,12 @@ Select Satelite below<br>
             icon: image,
             title: 'Satellite'
         });
+	circle = new google.maps.Circle({
+  		map: map,
+  		radius: 16093,    // 10 miles in metres
+  		fillColor: '#AA0000'
+	});
+//	circle.bindTo('center', marker, 'position');
 
         myTimer();
     }
@@ -104,7 +109,23 @@ Select Satelite below<br>
         var d = new Date();
         document.getElementById("demo").innerHTML = d.toLocaleTimeString();
 
-        var xmlhttp = new XMLHttpRequest();
+	var xml_dopplerhttp = new XMLHttpRequest();
+	xml_dopplerhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+                myObj2 = JSON.parse(this.responseText);
+
+                //print values at top
+                //document.getElementById("sat-name").innerHTML = myObj.name;
+		document.getElementById("sat-dop").innerHTML = myObj2.doppler + (document.getElementsByTagName("input")[0].value/1000000);
+	}
+	}
+	var select = document.getElementById("satellite");
+        var satellite = select.options[select.selectedIndex].text;
+
+        xml_dopplerhttp.open("GET", "jason_doppler.php?satellite=" + satellite, true);
+        xml_dopplerhttp.send();
+
+	var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 myObj = JSON.parse(this.responseText);
@@ -115,11 +136,8 @@ Select Satelite below<br>
                 document.getElementById("sat-long").innerHTML = myObj.long;
                 document.getElementById("sat-az").innerHTML = myObj.az;
                 document.getElementById("sat-el").innerHTML = myObj.el;
-
-
-
-
-
+		//document.getElementById("sat-dop").innerHTML = "test "; 
+		document.getElementById("sat-foot").innerHTML = myObj.footprint;
                 mapOptions = {
                     center: new google.maps.LatLng(Number(myObj.lat), Number(myObj.long)),
                     zoom: 3
@@ -128,8 +146,17 @@ Select Satelite below<br>
                 //replace latlng and pan map
                 newlatlng = new google.maps.LatLng((myObj.lat), Number(myObj.long));
                 map.panTo(newlatlng);
-
+		var footprint2 = document.getElementById("sat-foot").innerHTML * 100;	
+		circle.setMap(null);
+		circle = new google.maps.Circle({
+  			map: map,
+  			radius: footprint2,    // 10 miles in metres
+  			fillColor: '#770000'
+		});
                 marker.setPosition(newlatlng);
+		//circle.setMap(null);
+		circle.bindTo('center', marker, 'position');
+		//circle.setCenter(newlatlng)
             }
         }
 
@@ -153,12 +180,25 @@ Select Satelite below<br>
         var select = document.getElementById("satellite");
         var satellite = select.options[select.selectedIndex].text;
         document.getElementById("demo1").innerHTML = " bb" + satellite;
-
         xmlhttp.open("GET", "jason.php?satellite=" + satellite, true);
-
-        //	xmlhttp.open("GET", "jason.php", true);
         xmlhttp.send();
     }
+	function getSatJason_doppler() {
+	var xml_dopplerhttp = new XMLHttpRequest();
+        xml_dopplerhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var myObj = JSON.parse(this.responseText);
+                const markers = this.responseText;
+                // Load JSON Data
+                //          const hotelMarkers = getJSONMarkers();
+            }
+        }
+	var select = document.getElementById("satellite");
+        var satellite = select.options[select.selectedIndex].text;
+        document.getElementById("demo1").innerHTML = " bb" + satellite;
+       	xml_dopplerhttp.open("GET", "jason_doppler.php?satellite=" + satellite, true); 
+	xml_dopplerhttp.send();
+	}
 </script>
 
 <!-- Google Map Key -->
