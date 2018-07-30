@@ -77,7 +77,7 @@ Select Satelite below<br>
     var newlatlng;
     var marker;
     var image = 'images/Satellite_Icon.png';
-
+    var circle;
     function loadMap() {
         // Initialize Google Maps
         mapOptions = {
@@ -93,6 +93,12 @@ Select Satelite below<br>
             icon: image,
             title: 'Satellite'
         });
+	circle = new google.maps.Circle({
+  		map: map,
+  		radius: 16093,    // 10 miles in metres
+  		fillColor: '#AA0000'
+	});
+//	circle.bindTo('center', marker, 'position');
 
         myTimer();
     }
@@ -104,6 +110,16 @@ Select Satelite below<br>
         document.getElementById("demo").innerHTML = d.toLocaleTimeString();
 
         var xmlhttp = new XMLHttpRequest();
+	var xml_dopplerhttp = new XMLHttpRequest();
+	xml_dopplerhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+                myObj = JSON.parse(this.responseText);
+
+                //print values at top
+                //document.getElementById("sat-name").innerHTML = myObj.name;
+		document.getElementById("sat-dop").innerHTML = myObj.doppler;
+	}
+	}
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 myObj = JSON.parse(this.responseText);
@@ -124,8 +140,13 @@ Select Satelite below<br>
                 //replace latlng and pan map
                 newlatlng = new google.maps.LatLng((myObj.lat), Number(myObj.long));
                 map.panTo(newlatlng);
-
+		circle = new google.maps.Circle({
+  			map: map,
+  			radius: 16093,    // 10 miles in metres
+  			fillColor: '#AA0000'
+		});
                 marker.setPosition(newlatlng);
+		circle.bindTo('center', marker, 'position');
             }
         }
 
@@ -149,12 +170,25 @@ Select Satelite below<br>
         var select = document.getElementById("satellite");
         var satellite = select.options[select.selectedIndex].text;
         document.getElementById("demo1").innerHTML = " bb" + satellite;
-
         xmlhttp.open("GET", "jason.php?satellite=" + satellite, true);
-
-        //	xmlhttp.open("GET", "jason.php", true);
         xmlhttp.send();
     }
+	function getSatJason_doppler() {
+	var xml_dopplerhttp = new XMLHttpRequest();
+        xml_dopplerhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var myObj = JSON.parse(this.responseText);
+                const markers = this.responseText;
+                // Load JSON Data
+                //          const hotelMarkers = getJSONMarkers();
+            }
+        }
+	var select = document.getElementById("satellite");
+        var satellite = select.options[select.selectedIndex].text;
+        document.getElementById("demo1").innerHTML = " bb" + satellite;
+       	xml_dopplerhttp.open("GET", "jason_doppler.php?satellite=" + satellite, true); 
+	xml_dopplerhttp.send();
+	}
 </script>
 
 <!-- Google Map Key -->
